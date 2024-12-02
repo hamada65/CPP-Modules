@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <limits>
 #include <ios>
+#include <sstream>
 #include "Contact.hpp"
 #include "PhoneBook.hpp"
 
@@ -88,14 +89,19 @@ int PhoneBook::SEARCH()
         std::cout << " ------------------------------------------- " << std::endl;
         std::cout << "Enter index of the contact you want to see : " << std::endl;
         int index;
-        std::cin >> index;
-        if (std::cin.fail())
+        std::string indexInput;
+        if (getInput(indexInput))
+            return 1;
+        std::stringstream ss(indexInput);
+        std::string trash;
+        if (!(ss >> index))
         {
-            if (std::cin.eof())
-                return 1;
-            std::cerr << "INVALID INDEX !" << std::endl;
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cerr << "INDEX ERROR !" << std::endl;
+            return 0;
+        }
+        if (ss >> trash)
+        {
+            std::cerr << "INDEX ERROR !" << std::endl;
             return 0;
         }
         if (index >= 0 && index < contactNB)
@@ -108,7 +114,6 @@ int PhoneBook::SEARCH()
         }
         else
             std::cerr << "INDEX NOT FOUND !" << std::endl;
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
     return 0;
 }
