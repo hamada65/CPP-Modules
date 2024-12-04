@@ -9,19 +9,19 @@
 PhoneBook::PhoneBook() : contactNB(0), contactIndex(0) {}
 
 std::string Contact::getFName() const { return fName; }
-void Contact::setFName(const std::string &fName) { this->fName = fName; }
+void Contact::setFName(const std::string fName) { this->fName = fName; }
 
 std::string Contact::getLName() const { return lName; }
-void Contact::setLName(const std::string &lName) { this->lName = lName; }
+void Contact::setLName(const std::string lName) { this->lName = lName; }
 
 std::string Contact::getNName() const { return nName; }
-void Contact::setNName(const std::string &nName) { this->nName = nName; }
+void Contact::setNName(const std::string nName) { this->nName = nName; }
 
 std::string Contact::getPNumber() const { return pNumber; }
-void Contact::setPNumber(const std::string &pNumber) { this->pNumber = pNumber; }
+void Contact::setPNumber(const std::string pNumber) { this->pNumber = pNumber; }
 
 std::string Contact::getDarkestSecret() const { return darkestSecret; }
-void Contact::setDarkestSecret(const std::string &darkestSecret) { this->darkestSecret = darkestSecret; }
+void Contact::setDarkestSecret(const std::string darkestSecret) { this->darkestSecret = darkestSecret; }
 
 bool getInput(std::string &input) {
   std::getline(std::cin, input);
@@ -31,26 +31,27 @@ bool getInput(std::string &input) {
 int PhoneBook::ADD()
 {
     std::string input;
-    std::cout << "First Name : ";
-    if (getInput(input))
-        return 1;
-    Contacts[contactIndex].setFName(input);
-    std::cout << "Last Name : ";
-    if (getInput(input))
-        return 1;
-    Contacts[contactIndex].setLName(input);
-    std::cout << "Nickname : ";
-    if (getInput(input))
-        return 1;
-    Contacts[contactIndex].setNName(input);
-    std::cout << "Phone Number : ";
-    if (getInput(input))
-        return 1;
-    Contacts[contactIndex].setPNumber(input);
-    std::cout << "Darkest Secret : ";
-    if (getInput(input))
-        return 1;
-    Contacts[contactIndex].setDarkestSecret(input);
+    std::string requiredFields[5] = {"First Name", "Last Name", "Nickname", "Phone Number", "Darkest Secret"};
+    std::string fields[5];
+    for (int i = 0; i < 5; i++)
+    {
+        std::cout << requiredFields[i] << " : ";
+        if (getInput(input))
+            return 1;
+        while (input.empty())
+        {
+            std::cerr << "Field cannot be empty !" << std::endl;
+            std::cout << requiredFields[i] << " : ";
+            if (getInput(input))
+                return 1;
+        }
+        fields[i] = input;
+    }
+    Contacts[contactIndex].setFName(fields[0]);
+    Contacts[contactIndex].setLName(fields[1]);
+    Contacts[contactIndex].setNName(fields[2]);
+    Contacts[contactIndex].setPNumber(fields[3]);
+    Contacts[contactIndex].setDarkestSecret(fields[4]);
     if (contactNB < 8)
         contactNB++;
     contactIndex++;
@@ -131,6 +132,8 @@ int PhoneBook::ExecuteCommand(std::string command) {
         return SEARCH();
     else if (command == "EXIT")
         return EXIT();
+    else if (command.empty())
+        return 0;
     std::cout << "INVALID COMMAND !" << std::endl;
     return 0;
 }
