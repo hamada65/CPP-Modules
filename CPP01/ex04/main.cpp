@@ -11,13 +11,31 @@ void ft_replace(std::string &fileName, std::string &s1, std::string &s2) {
 	std::string line;
 	if (!std::getline(input, line))
 		return input.close();
+	std::string outName = fileName + ".replace";
+	std::ofstream output(outName.c_str());
+	if (!output.is_open())
+	{
+		std::cout << "Cannot Open output File" << std::endl;
+		input.close();
+		return ;
+	}
 	input.seekg(0, std::ios::beg);
 	// std::cout << fileName + " Opened Succes" << std::endl;
 	while (std::getline(input, line))
 	{
-		std::cout << line << std::endl;
+		// output << line << std::endl;
+		size_t found = line.find(s1);
+		while (s1 != s2 && !s1.empty() && found != std::string::npos)
+		{
+			line.erase(found, s1.length());
+			line.insert(found, s2);
+			found = line.find(s1);
+		}
+		output << line << "\n";
 	}
+	output.flush();
 	input.close();
+	output.close();
 	(void)s1;
 	(void)s2;
 }
