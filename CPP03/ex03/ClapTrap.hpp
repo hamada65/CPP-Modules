@@ -13,7 +13,7 @@ class ClapTrap {
         ClapTrap();
         ClapTrap(const std::string &name);
         ClapTrap(const ClapTrap &source);
-        ~ClapTrap();
+        virtual ~ClapTrap();
         ClapTrap &operator=(const ClapTrap &source);
         std::string getName() const;
         unsigned int getHitPoints() const;
